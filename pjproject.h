@@ -1,1 +1,1 @@
-#include "pjsip/include/pjsua.h"
+#include "pjsua.h"
