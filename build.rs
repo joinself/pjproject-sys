@@ -8,25 +8,21 @@ use std::env;
 use std::path::PathBuf;
 use std::process::Command;
 
-//use autotools::Config;
-
 fn main() {
-    // Tell cargo to tell rustc to link the system olm
-    // shared library.
 
     let target = env::var("TARGET").unwrap();
 
-    if target == "x86_64-apple-darwin" {
+    
+    
 
+    if target == "x86_64-apple-darwin" {
+        
     } else if target == "x86_64-apple-ios" {
 
     } else if target == "x86_64-linux-android" {
 
     } else if target == "x86_64-unknown-linux-gnu" {
-
     }
-
-    println!("{}", env::var("OUT_DIR").unwrap());
 
     Command::new("./configure")
         .arg("--disable-ssl")
@@ -96,4 +92,28 @@ fn main() {
         .write_to_file(out_path.join("pjproject.rs"))
         .expect("Couldn't write pjproject bindings!");
 
+
+    // link generated libraries
+    println!("cargo:rustc-link-search=vendor/pjlib/lib/");
+    println!("cargo:rustc-link-lib=pj-{}", target);
+
+    println!("cargo:rustc-link-search=vendor/pjlib-util/lib/");
+    println!("cargo:rustc-link-lib=pjlib-util-{}", target);
+
+    println!("cargo:rustc-link-search=vendor/pjmedia/lib/");
+    println!("cargo:rustc-link-lib=pjmedia-{}", target);
+    println!("cargo:rustc-link-lib=pjmedia-audiodev-{}", target);
+    println!("cargo:rustc-link-lib=pjmedia-codec-{}", target);
+    println!("cargo:rustc-link-lib=pjmedia-videodev-{}", target);
+    println!("cargo:rustc-link-lib=pjsdp-{}", target);
+
+    println!("cargo:rustc-link-search=vendor/pjnath/lib/");
+    println!("cargo:rustc-link-lib=pjnath-{}", target);
+
+    println!("cargo:rustc-link-search=vendor/pjsip/lib/");
+    println!("cargo:rustc-link-lib=pjsip-{}", target);
+    println!("cargo:rustc-link-lib=pjsip-ua-{}", target);
+    println!("cargo:rustc-link-lib=pjsip-simple-{}", target);
+    println!("cargo:rustc-link-lib=pjsua-{}", target);
+    println!("cargo:rustc-link-lib=pjsua2-{}", target);
 }
