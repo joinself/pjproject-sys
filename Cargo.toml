@@ -12,3 +12,4 @@ build = "build.rs"
 
 [build-dependencies]
 bindgen = "0.59.2"
+make-cmd = "0.1.0"

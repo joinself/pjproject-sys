@@ -1,3 +1,1 @@
-#include "pjlib.h"
-#include "pjnath.h"
-#include "pjmedia.h"
+#include "pjsip/include/pjsua.h"

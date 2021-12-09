@@ -2,6 +2,7 @@
 // Copyright 2020 Self Group Ltd. All Rights Reserved.
 
 extern crate bindgen;
+extern crate make_cmd;
 
 use std::env;
 use std::path::PathBuf;
@@ -29,30 +30,45 @@ fn main() {
     println!("{}", env::var("OUT_DIR").unwrap());
 
     Command::new("./configure")
-        // .arg(format!("--prefix=:{}/", env::var("OUT_DIR").unwrap()))
+        .arg("--disable-ssl")
+        .arg("--disable-sound")
+        .arg("--disable-resample")
+        .arg("--disable-small-filter")
+        .arg("--disable-large-filter")
+        .arg("--disable-floating-point")
+        .arg("--disable-speex-aec")
+        .arg("--disable-g711-plc")
+        .arg("--disable-g711-codec")
+        .arg("--disable-gsm-codec")
+        .arg("--disable-speex-codec")
+        .arg("--disable-ilbc-codec")
         .current_dir("vendor")
         .output()
         .expect("failed to configure");
 
 
-   Command::new("make")
+    make_cmd::make()
         .arg("dep")
         .current_dir("vendor")
-        .output()
-        .expect("failed to make deps");
-
-    Command::new("make")
+        .spawn()
+        .unwrap()
+        .wait()
+        .unwrap();
+    
+    make_cmd::make()
         .arg("clean")
         .current_dir("vendor")
-        .output()
-        .expect("failed to make clean");
-    
+        .spawn()
+        .unwrap()
+        .wait()
+        .unwrap();
 
-    Command::new("make")
+    make_cmd::make()
         .current_dir("vendor")
-        .output()
-        .expect("failed to make");
-
+        .spawn()
+        .unwrap()
+        .wait()
+        .unwrap();
 
     println!("cargo:rerun-if-changed=zrtp.h");
 
@@ -62,6 +78,7 @@ fn main() {
         .clang_arg("-Ivendor/pjlib-util/include/")
         .clang_arg("-Ivendor/pjnath/include/")
         .clang_arg("-Ivendor/pjmedia/include/")
+        .clang_arg("-Ivendor/pjsip/include/")
         .header("pjproject.h")
         .parse_callbacks(Box::new(bindgen::CargoCallbacks))
         .generate()
