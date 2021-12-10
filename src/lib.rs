@@ -9,6 +9,7 @@ include!(concat!(env!("OUT_DIR"), "/pjproject.rs"));
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::os::raw::c_char;
 
     #[test]
     fn it_works() {
@@ -16,7 +17,7 @@ mod tests {
         assert_eq!(result, 4);
 
         unsafe {
-            pj_enter_critical_section();
+            pj_rand();
         }
     }
 }
