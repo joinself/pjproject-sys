@@ -94,6 +94,7 @@ fn main() {
 
 
     // link generated libraries
+    
     println!("cargo:rustc-link-search=vendor/pjlib/lib/");
     println!("cargo:rustc-link-lib=pj-{}", target);
 
@@ -116,4 +117,6 @@ fn main() {
     println!("cargo:rustc-link-lib=pjsip-simple-{}", target);
     println!("cargo:rustc-link-lib=pjsua-{}", target);
     println!("cargo:rustc-link-lib=pjsua2-{}", target);
+
+    println!("cargo:rustc-link-lib=uuid");
 }
