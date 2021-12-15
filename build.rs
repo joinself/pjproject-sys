@@ -30,6 +30,57 @@ fn main() {
     cc::Build::new()
         .warnings(false)
         .include(pjlib_includes)
+        .define("PJ_HAS_FLOATING_POINT", "0")
+        .file("vendor/pjlib/src/pj/activesock.c")
+        .file("vendor/pjlib/src/pj/addr_resolv_sock.c")
+        .file("vendor/pjlib/src/pj/array.c")
+        .file("vendor/pjlib/src/pj/config.c")
+        .file("vendor/pjlib/src/pj/ctype.c")
+        .file("vendor/pjlib/src/pj/errno.c")
+        .file("vendor/pjlib/src/pj/except.c")
+        .file("vendor/pjlib/src/pj/fifobuf.c")
+        .file("vendor/pjlib/src/pj/file_access_unistd.c")
+        .file("vendor/pjlib/src/pj/file_io_ansi.c")
+        .file("vendor/pjlib/src/pj/guid_simple.c")
+        .file("vendor/pjlib/src/pj/hash.c")
+        .file("vendor/pjlib/src/pj/ioqueue_select.c")
+        .file("vendor/pjlib/src/pj/ip_helper_generic.c")
+        .file("vendor/pjlib/src/pj/list.c")
+        .file("vendor/pjlib/src/pj/lock.c")
+        .file("vendor/pjlib/src/pj/log.c")
+        .file("vendor/pjlib/src/pj/log_writer_stdout.c")
+        .file("vendor/pjlib/src/pj/os_core_unix.c")
+        .file("vendor/pjlib/src/pj/os_error_unix.c")
+        .file("vendor/pjlib/src/pj/os_info.c")
+        .file("vendor/pjlib/src/pj/os_time_common.c")
+        .file("vendor/pjlib/src/pj/os_time_unix.c")
+        .file("vendor/pjlib/src/pj/os_timestamp_common.c")
+        .file("vendor/pjlib/src/pj/os_timestamp_posix.c")
+        .file("vendor/pjlib/src/pj/pool_buf.c")
+        .file("vendor/pjlib/src/pj/pool.c")
+        .file("vendor/pjlib/src/pj/pool_caching.c")
+        .file("vendor/pjlib/src/pj/pool_dbg.c")
+        .file("vendor/pjlib/src/pj/pool_policy_malloc.c")
+        .file("vendor/pjlib/src/pj/rand.c")
+        .file("vendor/pjlib/src/pj/rbtree.c")
+        .file("vendor/pjlib/src/pj/sock_common.c")
+        .file("vendor/pjlib/src/pj/sock_qos_bsd.c")
+        .file("vendor/pjlib/src/pj/sock_qos_common.c")
+        .file("vendor/pjlib/src/pj/sock_select.c")
+        .file("vendor/pjlib/src/pj/ssl_sock_common.c")
+        .file("vendor/pjlib/src/pj/ssl_sock_darwin.c")
+        .file("vendor/pjlib/src/pj/ssl_sock_dump.c")
+        .file("vendor/pjlib/src/pj/ssl_sock_ossl.c")
+        .file("vendor/pjlib/src/pj/string.c")
+        .file("vendor/pjlib/src/pj/symbols.c")
+        .file("vendor/pjlib/src/pj/timer.c")
+        .file("vendor/pjlib/src/pj/types.c")
+        .compile("pj");
+
+
+    cc::Build::new()
+        .warnings(false)
+        .include(pjlib_includes)
         .include(pjlib_util_includes)
         .include(pjnath_includes)
         .file("vendor/pjnath/src/pjnath/errno.c")
@@ -57,12 +108,10 @@ fn main() {
         .include(srtp_includes)
         .include(srtp_crypto_includes)
         .include(speex_includes)
-        // .define("PJMEDIA_EXTERNAL_SRTP", "0")
         .define("PJMEDIA_HAS_SPEEX_CODEC", "0")
         .define("PJMEDIA_HAS_G711_CODEC", "0")
         .define("PJMEDIA_HAS_GSM_CODEC", "0")
         .define("PJMEDIA_HAS_ILBC_CODEC", "0")
-        .define("PJ_HAS_FLOATING_POINT", "0")
         .file("vendor/pjmedia/src/pjmedia/alaw_ulaw.c")
         .file("vendor/pjmedia/src/pjmedia/alaw_ulaw_table.c")
         .file("vendor/pjmedia/src/pjmedia/audiodev.c")
@@ -161,32 +210,4 @@ fn main() {
     bindings
         .write_to_file(out_path.join("pjproject.rs"))
         .expect("Couldn't write pjproject bindings!");
-
-
-    // link generated libraries
-    
-    println!("cargo:rustc-link-search=vendor/pjlib/lib/");
-    println!("cargo:rustc-link-lib=pj-{}", target);
-
-    println!("cargo:rustc-link-search=vendor/pjlib-util/lib/");
-    println!("cargo:rustc-link-lib=pjlib-util-{}", target);
-
-    println!("cargo:rustc-link-search=vendor/pjmedia/lib/");
-    println!("cargo:rustc-link-lib=pjmedia-{}", target);
-    println!("cargo:rustc-link-lib=pjmedia-audiodev-{}", target);
-    println!("cargo:rustc-link-lib=pjmedia-codec-{}", target);
-    println!("cargo:rustc-link-lib=pjmedia-videodev-{}", target);
-    println!("cargo:rustc-link-lib=pjsdp-{}", target);
-
-    println!("cargo:rustc-link-search=vendor/pjnath/lib/");
-    println!("cargo:rustc-link-lib=pjnath-{}", target);
-
-    println!("cargo:rustc-link-search=vendor/pjsip/lib/");
-    println!("cargo:rustc-link-lib=pjsip-{}", target);
-    println!("cargo:rustc-link-lib=pjsip-ua-{}", target);
-    println!("cargo:rustc-link-lib=pjsip-simple-{}", target);
-    println!("cargo:rustc-link-lib=pjsua-{}", target);
-    println!("cargo:rustc-link-lib=pjsua2-{}", target);
-
-    println!("cargo:rustc-link-lib=uuid");
 }
