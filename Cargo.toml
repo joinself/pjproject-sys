@@ -12,5 +12,5 @@ doctest = false
 
 
 [build-dependencies]
+cc = "1.0"
 bindgen = "0.59.2"
-make-cmd = "0.1.0"
