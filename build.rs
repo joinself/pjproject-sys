@@ -3,11 +3,15 @@
 
 extern crate bindgen;
 
+use std::collections::HashMap;
 use std::env;
 use std::path::{Path, PathBuf};
 
 fn main() {
     let target = env::var("TARGET").unwrap();
+    let mut defines = HashMap::<&str, &str>::new();
+    let mut clang_flags = Vec::<&str>::new();
+
     let pjlib_includes = Path::new("vendor/pjlib/include/");
     let pjlib_util_includes = Path::new("vendor/pjlib-util/include/");
     let pjnath_includes = Path::new("vendor/pjnath/include/");
@@ -18,19 +22,75 @@ fn main() {
     let speex_includes = Path::new("vendor/third_party/speex/include/");
 
     if target == "x86_64-apple-darwin" {
-        
-    } else if target == "x86_64-apple-ios" {
-
+    } else if target == "x86_64-apple-ios" {        
     } else if target == "x86_64-linux-android" {
-
     } else if target == "x86_64-unknown-linux-gnu" {
+    } else if target == "aarch64-apple-darwin" {
+        defines.insert("ARM", "1");
+        defines.insert("PJ_HAS_PENTIUM", "0");
+        defines.insert("PJ_IS_BIG_ENDIAN", "0");
+        defines.insert("PJ_IS_LITTLE_ENDIAN", "1");
+        defines.insert("PJ_M_ARM64", "1");
 
+        clang_flags.push("-DARM");
+        clang_flags.push("-DPJ_M_ARM64");
+        clang_flags.push("-DPJ_HAS_PENTIUM=0");
+        clang_flags.push("-DPJ_IS_BIG_ENDIAN=0");
+        clang_flags.push("-DPJ_IS_LITTLE_ENDIAN=0");
+    } else if target == "aarch64-apple-ios" {
+        defines.insert("ARM", "1");
+        defines.insert("PJ_HAS_PENTIUM", "0");
+        defines.insert("PJ_IS_BIG_ENDIAN", "0");
+        defines.insert("PJ_IS_LITTLE_ENDIAN", "1");
+        defines.insert("PJ_M_ARM64", "1");
+
+        clang_flags.push("-DARM");
+        clang_flags.push("-DPJ_M_ARM64");
+        clang_flags.push("-DPJ_HAS_PENTIUM=0");
+        clang_flags.push("-DPJ_IS_BIG_ENDIAN=0");
+        clang_flags.push("-DPJ_IS_LITTLE_ENDIAN=0");
+    } else if target == "aarch64-apple-ios-sim" {
+        defines.insert("ARM", "1");
+        defines.insert("PJ_HAS_PENTIUM", "0");
+        defines.insert("PJ_IS_BIG_ENDIAN", "0");
+        defines.insert("PJ_IS_LITTLE_ENDIAN", "1");
+        defines.insert("PJ_M_ARM64", "1");
+
+        clang_flags.push("-DARM");
+        clang_flags.push("-DPJ_M_ARM64");
+        clang_flags.push("-DPJ_HAS_PENTIUM=0");
+        clang_flags.push("-DPJ_IS_BIG_ENDIAN=0");
+        clang_flags.push("-DPJ_IS_LITTLE_ENDIAN=0");
+    } else if target == "aarch64-linux-android" {
+        defines.insert("ARM", "1");
+        defines.insert("PJ_HAS_PENTIUM", "0");
+        defines.insert("PJ_IS_BIG_ENDIAN", "0");
+        defines.insert("PJ_IS_LITTLE_ENDIAN", "1");
+        defines.insert("PJ_M_ARM64", "1");
+
+        clang_flags.push("-DARM");
+        clang_flags.push("-DPJ_M_ARM64");
+        clang_flags.push("-DPJ_HAS_PENTIUM=0");
+        clang_flags.push("-DPJ_IS_BIG_ENDIAN=0");
+        clang_flags.push("-DPJ_IS_LITTLE_ENDIAN=0");
+    } else if target == "aarch64-unknown-linux-gnu" {
+        defines.insert("ARM", "1");
+        defines.insert("PJ_HAS_PENTIUM", "0");
+        defines.insert("PJ_IS_BIG_ENDIAN", "0");
+        defines.insert("PJ_IS_LITTLE_ENDIAN", "1");
+        defines.insert("PJ_M_ARM64", "1");
+
+        clang_flags.push("-DARM");
+        clang_flags.push("-DPJ_M_ARM64");
+        clang_flags.push("-DPJ_HAS_PENTIUM=0");
+        clang_flags.push("-DPJ_IS_BIG_ENDIAN=0");
+        clang_flags.push("-DPJ_IS_LITTLE_ENDIAN=0");
     }
 
-    cc::Build::new()
-        .warnings(false)
+    let mut pj_cmd = cc::Build::new();
+        
+    pj_cmd.warnings(false)
         .include(pjlib_includes)
-        .define("PJ_HAS_FLOATING_POINT", "0")
         .file("vendor/pjlib/src/pj/activesock.c")
         .file("vendor/pjlib/src/pj/addr_resolv_sock.c")
         .file("vendor/pjlib/src/pj/array.c")
@@ -74,11 +134,17 @@ fn main() {
         .file("vendor/pjlib/src/pj/string.c")
         .file("vendor/pjlib/src/pj/symbols.c")
         .file("vendor/pjlib/src/pj/timer.c")
-        .file("vendor/pjlib/src/pj/types.c")
-        .compile("pj");
+        .file("vendor/pjlib/src/pj/types.c");
+        
+    for (key, value) in &defines {
+        pj_cmd.define(key, *value);
+    }
+        
+    pj_cmd.compile("pj");
 
-    cc::Build::new()
-        .warnings(false)
+    let mut pj_util_cmd = cc::Build::new();
+
+    pj_util_cmd.warnings(false)
         .include(pjlib_includes)
         .include(pjlib_util_includes)
         .file("vendor/pjlib-util/src/pjlib-util/base64.c")
@@ -105,11 +171,17 @@ fn main() {
         .file("vendor/pjlib-util/src/pjlib-util/stun_simple.c")
         .file("vendor/pjlib-util/src/pjlib-util/stun_simple_client.c")
         .file("vendor/pjlib-util/src/pjlib-util/symbols.c")
-        .file("vendor/pjlib-util/src/pjlib-util/xml.c")
-        .compile("pj-util");    
+        .file("vendor/pjlib-util/src/pjlib-util/xml.c");
 
-    cc::Build::new()
-        .warnings(false)
+    for (key, value) in &defines {
+        pj_util_cmd.define(key, *value);
+    }
+
+    pj_util_cmd.compile("pj-util");    
+
+    let mut pj_nath_cmd = cc::Build::new();
+    
+    pj_nath_cmd.warnings(false)
         .include(pjlib_includes)
         .include(pjlib_util_includes)
         .include(pjnath_includes)
@@ -124,11 +196,17 @@ fn main() {
         .file("vendor/pjnath/src/pjnath/stun_sock.c")
         .file("vendor/pjnath/src/pjnath/stun_transaction.c")
         .file("vendor/pjnath/src/pjnath/turn_session.c")
-        .file("vendor/pjnath/src/pjnath/turn_sock.c")
-        .compile("pjnath");
+        .file("vendor/pjnath/src/pjnath/turn_sock.c");
+
+    for (key, value) in &defines {
+        pj_nath_cmd.define(key, *value);
+    }
+
+    pj_nath_cmd.compile("pjnath");
  
-    cc::Build::new()
-        .warnings(false)
+    let mut pj_media_cmd = cc::Build::new();
+
+    pj_media_cmd.warnings(false)
         .include("vendor/")
         .include(pjlib_includes)
         .include(pjlib_util_includes)
@@ -211,14 +289,24 @@ fn main() {
         .file("vendor/pjmedia/src/pjmedia/wav_player.c")
         .file("vendor/pjmedia/src/pjmedia/wav_playlist.c")
         .file("vendor/pjmedia/src/pjmedia/wav_writer.c")
-        .file("vendor/pjmedia/src/pjmedia/wsola.c")
-        .compile("pjmedia");
+        .file("vendor/pjmedia/src/pjmedia/wsola.c");
+
+    for (key, value) in &defines {
+        pj_media_cmd.define(key, *value);
+    }
+
+    pj_media_cmd.compile("pjmedia");
 
     println!("cargo:rerun-if-changed=zrtp.h");
 
     // generate the bindings for pjproject headers
-    let bindings = bindgen::Builder::default()
-        .clang_arg("-Ivendor/pjlib/include/")
+    let mut builder = bindgen::Builder::default();
+
+    for value in &clang_flags {
+        builder = builder.clang_arg(*value);
+    }
+
+    let bindings = builder.clang_arg("-Ivendor/pjlib/include/")
         .clang_arg("-Ivendor/pjlib-util/include/")
         .clang_arg("-Ivendor/pjnath/include/")
         .clang_arg("-Ivendor/pjmedia/include/")
