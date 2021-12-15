@@ -36,7 +36,7 @@ fn main() {
         clang_flags.push("-DPJ_M_ARM64");
         clang_flags.push("-DPJ_HAS_PENTIUM=0");
         clang_flags.push("-DPJ_IS_BIG_ENDIAN=0");
-        clang_flags.push("-DPJ_IS_LITTLE_ENDIAN=0");
+        clang_flags.push("-DPJ_IS_LITTLE_ENDIAN=1");
     } else if target == "aarch64-apple-ios" {
         defines.insert("ARM", "1");
         defines.insert("PJ_HAS_PENTIUM", "0");
@@ -48,7 +48,7 @@ fn main() {
         clang_flags.push("-DPJ_M_ARM64");
         clang_flags.push("-DPJ_HAS_PENTIUM=0");
         clang_flags.push("-DPJ_IS_BIG_ENDIAN=0");
-        clang_flags.push("-DPJ_IS_LITTLE_ENDIAN=0");
+        clang_flags.push("-DPJ_IS_LITTLE_ENDIAN=1");
     } else if target == "aarch64-apple-ios-sim" {
         defines.insert("ARM", "1");
         defines.insert("PJ_HAS_PENTIUM", "0");
@@ -60,7 +60,7 @@ fn main() {
         clang_flags.push("-DPJ_M_ARM64");
         clang_flags.push("-DPJ_HAS_PENTIUM=0");
         clang_flags.push("-DPJ_IS_BIG_ENDIAN=0");
-        clang_flags.push("-DPJ_IS_LITTLE_ENDIAN=0");
+        clang_flags.push("-DPJ_IS_LITTLE_ENDIAN=1");
     } else if target == "aarch64-linux-android" {
         defines.insert("ARM", "1");
         defines.insert("PJ_HAS_PENTIUM", "0");
@@ -72,7 +72,7 @@ fn main() {
         clang_flags.push("-DPJ_M_ARM64");
         clang_flags.push("-DPJ_HAS_PENTIUM=0");
         clang_flags.push("-DPJ_IS_BIG_ENDIAN=0");
-        clang_flags.push("-DPJ_IS_LITTLE_ENDIAN=0");
+        clang_flags.push("-DPJ_IS_LITTLE_ENDIAN=1");
     } else if target == "aarch64-unknown-linux-gnu" {
         defines.insert("ARM", "1");
         defines.insert("PJ_HAS_PENTIUM", "0");
@@ -84,7 +84,7 @@ fn main() {
         clang_flags.push("-DPJ_M_ARM64");
         clang_flags.push("-DPJ_HAS_PENTIUM=0");
         clang_flags.push("-DPJ_IS_BIG_ENDIAN=0");
-        clang_flags.push("-DPJ_IS_LITTLE_ENDIAN=0");
+        clang_flags.push("-DPJ_IS_LITTLE_ENDIAN=1");
     }
 
     let mut pj_cmd = cc::Build::new();
