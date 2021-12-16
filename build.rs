@@ -1,4 +1,3 @@
-
 // Copyright 2020 Self Group Ltd. All Rights Reserved.
 
 extern crate bindgen;
@@ -24,7 +23,7 @@ fn main() {
     let additional_includes = Path::new("additional/include/");
 
     if target == "x86_64-apple-darwin" {
-    } else if target == "x86_64-apple-ios" {        
+    } else if target == "x86_64-apple-ios" {
     } else if target == "x86_64-linux-android" {
     } else if target == "x86_64-unknown-linux-gnu" {
     } else if target == "aarch64-apple-darwin" {
@@ -93,8 +92,9 @@ fn main() {
     File::create("vendor/pjlib/include/pj/config_site.h").unwrap();
 
     let mut pj_cmd = cc::Build::new();
-        
-    pj_cmd.warnings(false)
+
+    pj_cmd
+        .warnings(false)
         .include(pjlib_includes)
         .file("vendor/pjlib/src/pj/activesock.c")
         .file("vendor/pjlib/src/pj/addr_resolv_sock.c")
@@ -140,16 +140,17 @@ fn main() {
         .file("vendor/pjlib/src/pj/symbols.c")
         .file("vendor/pjlib/src/pj/timer.c")
         .file("vendor/pjlib/src/pj/types.c");
-        
+
     for (key, value) in &defines {
         pj_cmd.define(key, *value);
     }
-        
+
     pj_cmd.compile("pj");
 
     let mut pj_util_cmd = cc::Build::new();
 
-    pj_util_cmd.warnings(false)
+    pj_util_cmd
+        .warnings(false)
         .include(pjlib_includes)
         .include(pjlib_util_includes)
         .file("vendor/pjlib-util/src/pjlib-util/base64.c")
@@ -182,11 +183,12 @@ fn main() {
         pj_util_cmd.define(key, *value);
     }
 
-    pj_util_cmd.compile("pj-util");    
+    pj_util_cmd.compile("pj-util");
 
     let mut pj_nath_cmd = cc::Build::new();
-    
-    pj_nath_cmd.warnings(false)
+
+    pj_nath_cmd
+        .warnings(false)
         .include(pjlib_includes)
         .include(pjlib_util_includes)
         .include(pjnath_includes)
@@ -208,10 +210,11 @@ fn main() {
     }
 
     pj_nath_cmd.compile("pjnath");
- 
+
     let mut pj_media_cmd = cc::Build::new();
 
-    pj_media_cmd.warnings(false)
+    pj_media_cmd
+        .warnings(false)
         .include("vendor/")
         .include(pjlib_includes)
         .include(pjlib_util_includes)
@@ -222,10 +225,18 @@ fn main() {
         .include(srtp_crypto_includes)
         .include(speex_includes)
         .include(additional_includes)
-        .define("PJMEDIA_HAS_SPEEX_CODEC", "0")
         .define("PJMEDIA_HAS_G711_CODEC", "0")
+        .define("PJMEDIA_HAS_G722_CODEC", "0")
+        .define("PJMEDIA_HAS_G7221_CODEC", "0")
         .define("PJMEDIA_HAS_GSM_CODEC", "0")
         .define("PJMEDIA_HAS_ILBC_CODEC", "0")
+        .define("PJMEDIA_HAS_ILBC_CODEC", "0")
+        .define("PJMEDIA_HAS_L16_CODEC", "0")
+        .define("PJMEDIA_HAS_OPENCORE_AMRNB_CODEC", "0")
+        .define("PJMEDIA_HAS_OPENCORE_AMRWB_CODEC", "0")
+        .define("PJMEDIA_HAS_OPUS_CODEC", "0")
+        .define("PJMEDIA_HAS_SILK_CODEC", "0")
+        .define("PJMEDIA_HAS_SPEEX_CODEC", "0")
         .file("vendor/pjmedia/src/pjmedia/alaw_ulaw.c")
         .file("vendor/pjmedia/src/pjmedia/alaw_ulaw_table.c")
         .file("vendor/pjmedia/src/pjmedia/audiodev.c")
@@ -313,7 +324,8 @@ fn main() {
         builder = builder.clang_arg(*value);
     }
 
-    let bindings = builder.clang_arg("-Ivendor/pjlib/include/")
+    let bindings = builder
+        .clang_arg("-Ivendor/pjlib/include/")
         .clang_arg("-Ivendor/pjlib-util/include/")
         .clang_arg("-Ivendor/pjnath/include/")
         .clang_arg("-Ivendor/pjmedia/include/")
