@@ -21,6 +21,7 @@ fn main() {
     let srtp_includes = Path::new("vendor/third_party/srtp/include/");
     let srtp_crypto_includes = Path::new("vendor/third_party/srtp/crypto/include/");
     let speex_includes = Path::new("vendor/third_party/speex/include/");
+    let additional_includes = Path::new("additional/include/");
 
     if target == "x86_64-apple-darwin" {
     } else if target == "x86_64-apple-ios" {        
@@ -220,6 +221,7 @@ fn main() {
         .include(srtp_includes)
         .include(srtp_crypto_includes)
         .include(speex_includes)
+        .include(additional_includes)
         .define("PJMEDIA_HAS_SPEEX_CODEC", "0")
         .define("PJMEDIA_HAS_G711_CODEC", "0")
         .define("PJMEDIA_HAS_GSM_CODEC", "0")
@@ -293,7 +295,8 @@ fn main() {
         .file("vendor/pjmedia/src/pjmedia/wav_player.c")
         .file("vendor/pjmedia/src/pjmedia/wav_playlist.c")
         .file("vendor/pjmedia/src/pjmedia/wav_writer.c")
-        .file("vendor/pjmedia/src/pjmedia/wsola.c");
+        .file("vendor/pjmedia/src/pjmedia/wsola.c")
+        .file("additional/src/circbuf.c");
 
     for (key, value) in &defines {
         pj_media_cmd.define(key, *value);
@@ -315,6 +318,7 @@ fn main() {
         .clang_arg("-Ivendor/pjnath/include/")
         .clang_arg("-Ivendor/pjmedia/include/")
         .clang_arg("-Ivendor/pjsip/include/")
+        .clang_arg("-Iadditional/include/")
         .allowlist_type(r"pj.*")
         .allowlist_type(r"PJ.*")
         .allowlist_function(r"pj.*")
