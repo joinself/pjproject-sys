@@ -237,6 +237,7 @@ fn main() {
         .define("PJMEDIA_HAS_OPUS_CODEC", "0")
         .define("PJMEDIA_HAS_SILK_CODEC", "0")
         .define("PJMEDIA_HAS_SPEEX_CODEC", "0")
+        .define("PJMEDIA_HAS_SPEEX_AEC", "0")
         .file("vendor/pjmedia/src/pjmedia/alaw_ulaw.c")
         .file("vendor/pjmedia/src/pjmedia/alaw_ulaw_table.c")
         .file("vendor/pjmedia/src/pjmedia/audiodev.c")
