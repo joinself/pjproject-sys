@@ -5,6 +5,7 @@ extern crate bindgen;
 
 use std::collections::HashMap;
 use std::env;
+use std::fs::File;
 use std::path::{Path, PathBuf};
 
 fn main() {
@@ -86,6 +87,9 @@ fn main() {
         clang_flags.push("-DPJ_IS_BIG_ENDIAN=0");
         clang_flags.push("-DPJ_IS_LITTLE_ENDIAN=1");
     }
+
+    // create an empty config file, as we're defining everything above
+    File::create("vendor/pjlib/include/pj/config_site.h").unwrap();
 
     let mut pj_cmd = cc::Build::new();
         
