@@ -10,7 +10,7 @@ use std::path::{Path, PathBuf};
 fn main() {
     let target = env::var("TARGET").unwrap();
     let mut defines = HashMap::<&str, &str>::new();
-    let mut clang_flags = Vec::<&str>::new();
+    let mut clang_flags = Vec::<String>::new();
 
     let pjlib_includes = Path::new("vendor/pjlib/include/");
     let pjlib_util_includes = Path::new("vendor/pjlib-util/include/");
@@ -33,11 +33,11 @@ fn main() {
         defines.insert("PJ_IS_LITTLE_ENDIAN", "1");
         defines.insert("PJ_M_ARM64", "1");
 
-        clang_flags.push("-DARM");
-        clang_flags.push("-DPJ_M_ARM64");
-        clang_flags.push("-DPJ_HAS_PENTIUM=0");
-        clang_flags.push("-DPJ_IS_BIG_ENDIAN=0");
-        clang_flags.push("-DPJ_IS_LITTLE_ENDIAN=1");
+        clang_flags.push(String::from("-DARM"));
+        clang_flags.push(String::from("-DPJ_M_ARM64"));
+        clang_flags.push(String::from("-DPJ_HAS_PENTIUM=0"));
+        clang_flags.push(String::from("-DPJ_IS_BIG_ENDIAN=0"));
+        clang_flags.push(String::from("-DPJ_IS_LITTLE_ENDIAN=1"));
     } else if target == "aarch64-apple-ios" {
         defines.insert("ARM", "1");
         defines.insert("PJ_HAS_PENTIUM", "0");
@@ -45,11 +45,11 @@ fn main() {
         defines.insert("PJ_IS_LITTLE_ENDIAN", "1");
         defines.insert("PJ_M_ARM64", "1");
 
-        clang_flags.push("-DARM");
-        clang_flags.push("-DPJ_M_ARM64");
-        clang_flags.push("-DPJ_HAS_PENTIUM=0");
-        clang_flags.push("-DPJ_IS_BIG_ENDIAN=0");
-        clang_flags.push("-DPJ_IS_LITTLE_ENDIAN=1");
+        clang_flags.push(String::from("-DARM"));
+        clang_flags.push(String::from("-DPJ_M_ARM64"));
+        clang_flags.push(String::from("-DPJ_HAS_PENTIUM=0"));
+        clang_flags.push(String::from("-DPJ_IS_BIG_ENDIAN=0"));
+        clang_flags.push(String::from("-DPJ_IS_LITTLE_ENDIAN=1"));
     } else if target == "aarch64-apple-ios-sim" {
         defines.insert("ARM", "1");
         defines.insert("PJ_HAS_PENTIUM", "0");
@@ -57,11 +57,11 @@ fn main() {
         defines.insert("PJ_IS_LITTLE_ENDIAN", "1");
         defines.insert("PJ_M_ARM64", "1");
 
-        clang_flags.push("-DARM");
-        clang_flags.push("-DPJ_M_ARM64");
-        clang_flags.push("-DPJ_HAS_PENTIUM=0");
-        clang_flags.push("-DPJ_IS_BIG_ENDIAN=0");
-        clang_flags.push("-DPJ_IS_LITTLE_ENDIAN=1");
+        clang_flags.push(String::from("-DARM"));
+        clang_flags.push(String::from("-DPJ_M_ARM64"));
+        clang_flags.push(String::from("-DPJ_HAS_PENTIUM=0"));
+        clang_flags.push(String::from("-DPJ_IS_BIG_ENDIAN=0"));
+        clang_flags.push(String::from("-DPJ_IS_LITTLE_ENDIAN=1"));
     } else if target == "aarch64-linux-android" {
         defines.insert("ARM", "1");
         defines.insert("PJ_HAS_PENTIUM", "0");
@@ -69,11 +69,11 @@ fn main() {
         defines.insert("PJ_IS_LITTLE_ENDIAN", "1");
         defines.insert("PJ_M_ARM64", "1");
 
-        clang_flags.push("-DARM");
-        clang_flags.push("-DPJ_M_ARM64");
-        clang_flags.push("-DPJ_HAS_PENTIUM=0");
-        clang_flags.push("-DPJ_IS_BIG_ENDIAN=0");
-        clang_flags.push("-DPJ_IS_LITTLE_ENDIAN=1");
+        clang_flags.push(String::from("-DARM"));
+        clang_flags.push(String::from("-DPJ_M_ARM64"));
+        clang_flags.push(String::from("-DPJ_HAS_PENTIUM=0"));
+        clang_flags.push(String::from("-DPJ_IS_BIG_ENDIAN=0"));
+        clang_flags.push(String::from("-DPJ_IS_LITTLE_ENDIAN=1"));
     } else if target == "aarch64-unknown-linux-gnu" {
         defines.insert("ARM", "1");
         defines.insert("PJ_HAS_PENTIUM", "0");
@@ -81,11 +81,40 @@ fn main() {
         defines.insert("PJ_IS_LITTLE_ENDIAN", "1");
         defines.insert("PJ_M_ARM64", "1");
 
-        clang_flags.push("-DARM");
-        clang_flags.push("-DPJ_M_ARM64");
-        clang_flags.push("-DPJ_HAS_PENTIUM=0");
-        clang_flags.push("-DPJ_IS_BIG_ENDIAN=0");
-        clang_flags.push("-DPJ_IS_LITTLE_ENDIAN=1");
+        clang_flags.push(String::from("-DARM"));
+        clang_flags.push(String::from("-DPJ_M_ARM64"));
+        clang_flags.push(String::from("-DPJ_HAS_PENTIUM=0"));
+        clang_flags.push(String::from("-DPJ_IS_BIG_ENDIAN=0"));
+        clang_flags.push(String::from("-DPJ_IS_LITTLE_ENDIAN=1"));
+    } else if target == "wasm32-unknown-emscripten" {
+        defines.insert("PJ_LINUX", "1");
+        defines.insert("PJ_M_X86_64", "1");
+
+        clang_flags.push(String::from("-DPJ_LINUX=1"));
+        clang_flags.push(String::from("-DPJ_M_X86_64=1"));
+
+        let host = env::var("HOST").unwrap();
+        let emscripten_path: &str;
+
+        if host == "x86_64-unknown-linux-gnu" {
+            emscripten_path = "/usr/share/emscripten/";
+        } else if host == "x86_64-apple-darwin" {
+            emscripten_path = "/usr/local/homebrew/opt/emscripten/libexec/";
+        } else if host == "aarch64-apple-darwin" {
+            emscripten_path = "/opt/homebrew/opt/emscripten/libexec/";
+        } else {
+            emscripten_path = "/usr/share/emscripten/";
+        }
+
+        let incl1 = format!("-I{}system/include/", emscripten_path);
+        let incl2 = format!("-I{}system/lib/libc/musl/include/", emscripten_path);
+        let incl3 = format!("-I{}system/lib/libc/musl/arch/emscripten/", emscripten_path);
+        let incl4 = format!("-I{}system/lib/libc/musl/arch/generic/", emscripten_path);
+
+        clang_flags.push(incl1);
+        clang_flags.push(incl2);
+        clang_flags.push(incl3);
+        clang_flags.push(incl4);
     }
 
     // create an empty config file, as we're defining everything above
@@ -109,7 +138,7 @@ fn main() {
         .file("vendor/pjlib/src/pj/guid_simple.c")
         .file("vendor/pjlib/src/pj/hash.c")
         .file("vendor/pjlib/src/pj/ioqueue_select.c")
-        .file("vendor/pjlib/src/pj/ip_helper_generic.c")
+        // .file("vendor/pjlib/src/pj/ip_helper_generic.c")
         .file("vendor/pjlib/src/pj/list.c")
         .file("vendor/pjlib/src/pj/lock.c")
         .file("vendor/pjlib/src/pj/log.c")
@@ -316,13 +345,11 @@ fn main() {
 
     pj_media_cmd.compile("pjmedia");
 
-    println!("cargo:rerun-if-changed=zrtp.h");
-
     // generate the bindings for pjproject headers
     let mut builder = bindgen::Builder::default();
 
     for value in &clang_flags {
-        builder = builder.clang_arg(*value);
+        builder = builder.clang_arg(value);
     }
 
     let bindings = builder
