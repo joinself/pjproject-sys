@@ -90,6 +90,7 @@ fn main() {
         defines.insert("PJ_LINUX", "1");
         defines.insert("PJ_M_X86_64", "1");
 
+        clang_flags.push(String::from("-fvisibility=default"));
         clang_flags.push(String::from("-DPJ_LINUX=1"));
         clang_flags.push(String::from("-DPJ_M_X86_64=1"));
 
