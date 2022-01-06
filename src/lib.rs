@@ -9,7 +9,7 @@ include!(concat!(env!("OUT_DIR"), "/pjproject.rs"));
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::os::raw::c_char;
+    use std::mem::MaybeUninit;
 
     #[test]
     fn it_works() {
@@ -18,6 +18,11 @@ mod tests {
 
         unsafe {
             pj_rand();
+
+            pj_init();
+
+            let mut uninit_rtp_session: MaybeUninit<pjmedia_rtp_session> = MaybeUninit::uninit();
+            pjmedia_rtp_session_init(uninit_rtp_session.as_mut_ptr(), 96, 17);
         }
     }
 }

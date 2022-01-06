@@ -139,7 +139,7 @@ fn main() {
         .file("vendor/pjlib/src/pj/guid_simple.c")
         .file("vendor/pjlib/src/pj/hash.c")
         .file("vendor/pjlib/src/pj/ioqueue_select.c")
-        // .file("vendor/pjlib/src/pj/ip_helper_generic.c")
+        .file("vendor/pjlib/src/pj/ip_helper_generic.c")
         .file("vendor/pjlib/src/pj/list.c")
         .file("vendor/pjlib/src/pj/lock.c")
         .file("vendor/pjlib/src/pj/log.c")
@@ -158,6 +158,7 @@ fn main() {
         .file("vendor/pjlib/src/pj/pool_policy_malloc.c")
         .file("vendor/pjlib/src/pj/rand.c")
         .file("vendor/pjlib/src/pj/rbtree.c")
+        .file("vendor/pjlib/src/pj/sock_bsd.c")
         .file("vendor/pjlib/src/pj/sock_common.c")
         .file("vendor/pjlib/src/pj/sock_qos_bsd.c")
         .file("vendor/pjlib/src/pj/sock_qos_common.c")
@@ -174,6 +175,8 @@ fn main() {
     for (key, value) in &defines {
         pj_cmd.define(key, *value);
     }
+
+    pj_cmd.define("PJ_HAS_NETINET_TCP_H", "1");
 
     pj_cmd.compile("pj");
 
