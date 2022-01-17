@@ -210,7 +210,8 @@ fn main() {
         .file("vendor/pjlib-util/src/pjlib-util/stun_simple.c")
         .file("vendor/pjlib-util/src/pjlib-util/stun_simple_client.c")
         .file("vendor/pjlib-util/src/pjlib-util/symbols.c")
-        .file("vendor/pjlib-util/src/pjlib-util/xml.c");
+        .file("vendor/pjlib-util/src/pjlib-util/xml.c")
+        .file("additional/src/os.c");
 
     for (key, value) in &defines {
         pj_util_cmd.define(key, *value);
