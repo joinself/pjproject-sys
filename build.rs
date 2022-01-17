@@ -236,7 +236,8 @@ fn main() {
         .file("vendor/pjnath/src/pjnath/stun_sock.c")
         .file("vendor/pjnath/src/pjnath/stun_transaction.c")
         .file("vendor/pjnath/src/pjnath/turn_session.c")
-        .file("vendor/pjnath/src/pjnath/turn_sock.c");
+        .file("vendor/pjnath/src/pjnath/turn_sock.c")
+        .file("additional/src/stun_config.c");
 
     for (key, value) in &defines {
         pj_nath_cmd.define(key, *value);
@@ -271,6 +272,7 @@ fn main() {
         .define("PJMEDIA_HAS_SILK_CODEC", "0")
         .define("PJMEDIA_HAS_SPEEX_CODEC", "0")
         .define("PJMEDIA_HAS_SPEEX_AEC", "0")
+        .define("PJ_FUNCTIONS_ARE_INLINED", "0")
         .file("vendor/pjmedia/src/pjmedia/alaw_ulaw.c")
         .file("vendor/pjmedia/src/pjmedia/alaw_ulaw_table.c")
         .file("vendor/pjmedia/src/pjmedia/audiodev.c")
