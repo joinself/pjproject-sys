@@ -162,6 +162,7 @@ fn main() {
         .file("vendor/pjlib/src/pj/sock_common.c")
         .file("vendor/pjlib/src/pj/sock_qos_bsd.c")
         .file("vendor/pjlib/src/pj/sock_qos_common.c")
+        .file("vendor/pjlib/src/pj/sock_qos_darwin.c")
         .file("vendor/pjlib/src/pj/sock_select.c")
         .file("vendor/pjlib/src/pj/ssl_sock_common.c")
         .file("vendor/pjlib/src/pj/ssl_sock_darwin.c")
