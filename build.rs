@@ -127,6 +127,7 @@ fn main() {
         .warnings(false)
         .include(pjlib_includes)
         .define("PJ_HAS_IPV6", "1")
+        .define("PJ_SOCK_HAS_INET_PTON", "1")
         .file("vendor/pjlib/src/pj/activesock.c")
         .file("vendor/pjlib/src/pj/addr_resolv_sock.c")
         .file("vendor/pjlib/src/pj/array.c")
