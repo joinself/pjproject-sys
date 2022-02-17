@@ -120,6 +120,7 @@ fn main() {
         defines.insert("PJ_IS_BIG_ENDIAN", "0");
         defines.insert("PJ_IS_LITTLE_ENDIAN", "1");
         defines.insert("PJ_M_ARM64", "1");
+        defines.insert("PJ_HAS_SYS_TIMEB_H", "0");
 
         clang_flags.push(String::from("-DARM"));
         clang_flags.push(String::from("-DPJ_M_ARM64"));
