@@ -115,6 +115,7 @@ fn main() {
         clang_flags.push(String::from("-DPJ_IS_BIG_ENDIAN=0"));
         clang_flags.push(String::from("-DPJ_IS_LITTLE_ENDIAN=1"));
     } else if target == "aarch64-linux-android" {
+        defines.insert("PJ_ANDROID", "1");
         defines.insert("ARM", "1");
         defines.insert("PJ_HAS_PENTIUM", "0");
         defines.insert("PJ_IS_BIG_ENDIAN", "0");
