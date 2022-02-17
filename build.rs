@@ -5,6 +5,7 @@ extern crate bindgen;
 use std::collections::HashMap;
 use std::env;
 use std::fs::File;
+use std::io::{Read, Write};
 use std::path::{Path, PathBuf};
 
 fn main() {
@@ -121,7 +122,24 @@ fn main() {
         defines.insert("PJ_IS_BIG_ENDIAN", "0");
         defines.insert("PJ_IS_LITTLE_ENDIAN", "1");
         defines.insert("PJ_M_ARM64", "1");
-        defines.insert("PJ_HAS_SYS_TIMEB_H", "0");
+
+        // TODO : replace this hack with something else
+        let define_from = "#define PJ_HAS_SYS_TIMEB_H	    1";
+        let define_to = "#define PJ_HAS_SYS_TIMEB_H	    0";
+
+        let os_linux = Path::new("./vendor/pjlib/include/pj/compat/os_linux.h");
+        let mut src = File::open(os_linux).unwrap();
+
+        let mut header_data = String::new();
+        src.read_to_string(&mut header_data).unwrap();
+        drop(src);  // Close the file early
+
+        // Run the replace operation in memory
+        let new_header_data = header_data.replace(&*define_from, &*define_to);
+
+        // Recreate the file and dump the processed contents to it
+        let mut dst = File::create(&os_linux).unwrap();
+        dst.write(new_header_data.as_bytes()).unwrap();
 
         clang_flags.push(String::from("-DARM"));
         clang_flags.push(String::from("-DPJ_M_ARM64"));
