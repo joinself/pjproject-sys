@@ -27,6 +27,13 @@ fn main() {
     } else if target == "x86_64-apple-ios" {
     } else if target == "x86_64-linux-android" {
         defines.insert("PJ_LINUX", "1");
+
+        defines.insert("ARM", "0");
+        defines.insert("PJ_HAS_PENTIUM", "1");
+        defines.insert("PJ_IS_BIG_ENDIAN", "0");
+        defines.insert("PJ_IS_LITTLE_ENDIAN", "1");
+        defines.insert("PJ_M_X86_64", "1");
+
         defines.insert("PJ_SOCK_HAS_INET_ATON", "1");
         defines.insert("PJ_SOCK_HAS_INET_PTON", "1");
         defines.insert("PJ_SOCK_HAS_INET_NTOP", "1");
