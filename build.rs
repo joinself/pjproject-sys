@@ -23,7 +23,37 @@ fn main() {
     let speex_includes = Path::new("vendor/third_party/speex/include/");
     let additional_includes = Path::new("additional/include/");
 
-    if target == "x86_64-apple-darwin" {
+    if target == "i686-linux-android" {
+        defines.insert("PJ_ANDROID", "1");
+        defines.insert("ARM", "0");
+        defines.insert("PJ_HAS_PENTIUM", "1");
+        defines.insert("PJ_IS_BIG_ENDIAN", "0");
+        defines.insert("PJ_IS_LITTLE_ENDIAN", "1");
+        defines.insert("PJ_M_I386", "1");
+
+        // TODO : replace this hack with something else
+        let define_from = "#define PJ_HAS_SYS_TIMEB_H	    1";
+        let define_to = "#define PJ_HAS_SYS_TIMEB_H	    0";
+
+        let os_linux = Path::new("./vendor/pjlib/include/pj/compat/os_linux.h");
+        let mut src = File::open(os_linux).unwrap();
+
+        let mut header_data = String::new();
+        src.read_to_string(&mut header_data).unwrap();
+        drop(src); // Close the file early
+
+        // Run the replace operation in memory
+        let new_header_data = header_data.replace(&*define_from, &*define_to);
+
+        // Recreate the file and dump the processed contents to it
+        let mut dst = File::create(&os_linux).unwrap();
+        dst.write(new_header_data.as_bytes()).unwrap();
+
+        clang_flags.push(String::from("-DPJ_M_I386"));
+        clang_flags.push(String::from("-DPJ_HAS_PENTIUM=1"));
+        clang_flags.push(String::from("-DPJ_IS_BIG_ENDIAN=0"));
+        clang_flags.push(String::from("-DPJ_IS_LITTLE_ENDIAN=1"));
+    } else if target == "x86_64-apple-darwin" {
     } else if target == "x86_64-apple-ios" {
     } else if target == "x86_64-linux-android" {
         defines.insert("PJ_ANDROID", "1");
@@ -108,6 +138,18 @@ fn main() {
         defines.insert("PJ_EMULATE_RWMUTEX", "0");
         defines.insert("PJ_THREAD_SET_STACK_SIZE", "0");
         defines.insert("PJ_THREAD_ALLOCATE_STACK", "0");
+    } else if target == "armv7-linux-androideabi" {
+        defines.insert("ARM", "1");
+        defines.insert("PJ_HAS_PENTIUM", "0");
+        defines.insert("PJ_IS_BIG_ENDIAN", "0");
+        defines.insert("PJ_IS_LITTLE_ENDIAN", "1");
+        defines.insert("PJ_M_ARMV7", "1");
+
+        clang_flags.push(String::from("-DARM"));
+        clang_flags.push(String::from("-DPJ_M_ARMV7"));
+        clang_flags.push(String::from("-DPJ_HAS_PENTIUM=0"));
+        clang_flags.push(String::from("-DPJ_IS_BIG_ENDIAN=0"));
+        clang_flags.push(String::from("-DPJ_IS_LITTLE_ENDIAN=1"));
     } else if target == "aarch64-apple-darwin" {
         defines.insert("ARM", "1");
         defines.insert("PJ_HAS_PENTIUM", "0");
