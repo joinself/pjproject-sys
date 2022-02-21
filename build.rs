@@ -30,7 +30,7 @@ fn main() {
         defines.insert("ARM", "0");
         defines.insert("PJ_HAS_PENTIUM", "1");
         defines.insert("PJ_IS_BIG_ENDIAN", "0");
-        // defines.insert("PJ_IS_LITTLE_ENDIAN", "1");
+        defines.insert("PJ_IS_LITTLE_ENDIAN", "1");
         defines.insert("PJ_M_X86_64", "1");
 
         // TODO : replace this hack with something else
@@ -42,7 +42,7 @@ fn main() {
 
         let mut header_data = String::new();
         src.read_to_string(&mut header_data).unwrap();
-        drop(src);  // Close the file early
+        drop(src); // Close the file early
 
         // Run the replace operation in memory
         let new_header_data = header_data.replace(&*define_from, &*define_to);
@@ -51,7 +51,6 @@ fn main() {
         let mut dst = File::create(&os_linux).unwrap();
         dst.write(new_header_data.as_bytes()).unwrap();
 
-        // clang_flags.push(String::from("-DARM"));
         clang_flags.push(String::from("-DPJ_M_X86_64"));
         clang_flags.push(String::from("-DPJ_HAS_PENTIUM=1"));
         clang_flags.push(String::from("-DPJ_IS_BIG_ENDIAN=0"));
@@ -162,7 +161,7 @@ fn main() {
 
         let mut header_data = String::new();
         src.read_to_string(&mut header_data).unwrap();
-        drop(src);  // Close the file early
+        drop(src); // Close the file early
 
         // Run the replace operation in memory
         let new_header_data = header_data.replace(&*define_from, &*define_to);
