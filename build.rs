@@ -30,7 +30,7 @@ fn main() {
         defines.insert("ARM", "0");
         defines.insert("PJ_HAS_PENTIUM", "1");
         defines.insert("PJ_IS_BIG_ENDIAN", "0");
-        defines.insert("PJ_IS_LITTLE_ENDIAN", "1");
+        // defines.insert("PJ_IS_LITTLE_ENDIAN", "1");
         defines.insert("PJ_M_X86_64", "1");
 
         // TODO : replace this hack with something else
@@ -52,8 +52,8 @@ fn main() {
         dst.write(new_header_data.as_bytes()).unwrap();
 
         // clang_flags.push(String::from("-DARM"));
-        clang_flags.push(String::from("-PJ_M_X86_64"));
-        clang_flags.push(String::from("-DPJ_HAS_PENTIUM=0"));
+        clang_flags.push(String::from("-DPJ_M_X86_64"));
+        clang_flags.push(String::from("-DPJ_HAS_PENTIUM=1"));
         clang_flags.push(String::from("-DPJ_IS_BIG_ENDIAN=0"));
         clang_flags.push(String::from("-DPJ_IS_LITTLE_ENDIAN=1"));
     } else if target == "x86_64-unknown-linux-gnu" {
