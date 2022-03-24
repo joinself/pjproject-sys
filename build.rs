@@ -141,6 +141,7 @@ fn main() {
         defines.insert("PJ_THREAD_SET_STACK_SIZE", "0");
         defines.insert("PJ_THREAD_ALLOCATE_STACK", "0");
     } else if target == "armv7-linux-androideabi" {
+        defines.insert("PJ_ANDROID", "1");
         defines.insert("ARM", "1");
         defines.insert("PJ_HAS_PENTIUM", "0");
         defines.insert("PJ_IS_BIG_ENDIAN", "0");
