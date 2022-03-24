@@ -149,6 +149,24 @@ fn main() {
         defines.insert("PJ_M_ARMV7", "1");
         defines.insert("PJ_JNI_HAS_JNI_ONLOAD", "0");
 
+        // TODO : replace this hack with something else
+        let define_from = "#define PJ_HAS_SYS_TIMEB_H	    1";
+        let define_to = "#define PJ_HAS_SYS_TIMEB_H	    0";
+
+        let os_linux = Path::new("./vendor/pjlib/include/pj/compat/os_linux.h");
+        let mut src = File::open(os_linux).unwrap();
+
+        let mut header_data = String::new();
+        src.read_to_string(&mut header_data).unwrap();
+        drop(src); // Close the file early
+
+        // Run the replace operation in memory
+        let new_header_data = header_data.replace(&*define_from, &*define_to);
+
+        // Recreate the file and dump the processed contents to it
+        let mut dst = File::create(&os_linux).unwrap();
+        dst.write(new_header_data.as_bytes()).unwrap();
+
         clang_flags.push(String::from("-DARM"));
         clang_flags.push(String::from("-DPJ_M_ARMV7"));
         clang_flags.push(String::from("-DPJ_HAS_PENTIUM=0"));
