@@ -30,6 +30,7 @@ fn main() {
         defines.insert("PJ_IS_BIG_ENDIAN", "0");
         defines.insert("PJ_IS_LITTLE_ENDIAN", "1");
         defines.insert("PJ_M_I386", "1");
+        defines.insert("PJ_JNI_HAS_JNI_ONLOAD", "0");
 
         // TODO : replace this hack with something else
         let define_from = "#define PJ_HAS_SYS_TIMEB_H	    1";
@@ -62,6 +63,7 @@ fn main() {
         defines.insert("PJ_IS_BIG_ENDIAN", "0");
         defines.insert("PJ_IS_LITTLE_ENDIAN", "1");
         defines.insert("PJ_M_X86_64", "1");
+        defines.insert("PJ_JNI_HAS_JNI_ONLOAD", "0");
 
         // TODO : replace this hack with something else
         let define_from = "#define PJ_HAS_SYS_TIMEB_H	    1";
@@ -144,6 +146,7 @@ fn main() {
         defines.insert("PJ_IS_BIG_ENDIAN", "0");
         defines.insert("PJ_IS_LITTLE_ENDIAN", "1");
         defines.insert("PJ_M_ARMV7", "1");
+        defines.insert("PJ_JNI_HAS_JNI_ONLOAD", "0");
 
         clang_flags.push(String::from("-DARM"));
         clang_flags.push(String::from("-DPJ_M_ARMV7"));
@@ -193,6 +196,7 @@ fn main() {
         defines.insert("PJ_IS_BIG_ENDIAN", "0");
         defines.insert("PJ_IS_LITTLE_ENDIAN", "1");
         defines.insert("PJ_M_ARM64", "1");
+        defines.insert("PJ_JNI_HAS_JNI_ONLOAD", "0");
 
         // TODO : replace this hack with something else
         let define_from = "#define PJ_HAS_SYS_TIMEB_H	    1";
