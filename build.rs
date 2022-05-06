@@ -140,6 +140,8 @@ fn main() {
         defines.insert("PJ_EMULATE_RWMUTEX", "0");
         defines.insert("PJ_THREAD_SET_STACK_SIZE", "0");
         defines.insert("PJ_THREAD_ALLOCATE_STACK", "0");
+        defines.insert("PJ_TIMER_DEBUG", "0");
+        clang_flags.push(String::from("-DPJ_TIMER_DEBUG=0"));
     } else if target == "armv7-linux-androideabi" {
         defines.insert("PJ_ANDROID", "1");
         defines.insert("ARM", "1");
