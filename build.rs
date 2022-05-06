@@ -31,29 +31,31 @@ fn main() {
         defines.insert("PJ_IS_LITTLE_ENDIAN", "1");
         defines.insert("PJ_M_I386", "1");
         defines.insert("PJ_JNI_HAS_JNI_ONLOAD", "0");
-
+        defines.insert("PJ_TIMER_DEBUG", "0");
+        
         // TODO : replace this hack with something else
         let define_from = "#define PJ_HAS_SYS_TIMEB_H	    1";
         let define_to = "#define PJ_HAS_SYS_TIMEB_H	    0";
-
+        
         let os_linux = Path::new("./vendor/pjlib/include/pj/compat/os_linux.h");
         let mut src = File::open(os_linux).unwrap();
-
+        
         let mut header_data = String::new();
         src.read_to_string(&mut header_data).unwrap();
         drop(src); // Close the file early
-
+        
         // Run the replace operation in memory
         let new_header_data = header_data.replace(&*define_from, &*define_to);
-
+        
         // Recreate the file and dump the processed contents to it
         let mut dst = File::create(&os_linux).unwrap();
         dst.write(new_header_data.as_bytes()).unwrap();
-
+        
         clang_flags.push(String::from("-DPJ_M_I386"));
         clang_flags.push(String::from("-DPJ_HAS_PENTIUM=1"));
         clang_flags.push(String::from("-DPJ_IS_BIG_ENDIAN=0"));
         clang_flags.push(String::from("-DPJ_IS_LITTLE_ENDIAN=1"));
+        clang_flags.push(String::from("-DPJ_TIMER_DEBUG=0"));
     } else if target == "x86_64-apple-darwin" {
     } else if target == "x86_64-apple-ios" {
     } else if target == "x86_64-linux-android" {
@@ -64,6 +66,7 @@ fn main() {
         defines.insert("PJ_IS_LITTLE_ENDIAN", "1");
         defines.insert("PJ_M_X86_64", "1");
         defines.insert("PJ_JNI_HAS_JNI_ONLOAD", "0");
+        defines.insert("PJ_TIMER_DEBUG", "0");
 
         // TODO : replace this hack with something else
         let define_from = "#define PJ_HAS_SYS_TIMEB_H	    1";
@@ -87,13 +90,13 @@ fn main() {
         clang_flags.push(String::from("-DPJ_HAS_PENTIUM=1"));
         clang_flags.push(String::from("-DPJ_IS_BIG_ENDIAN=0"));
         clang_flags.push(String::from("-DPJ_IS_LITTLE_ENDIAN=1"));
+        clang_flags.push(String::from("-DPJ_TIMER_DEBUG=0"));
     } else if target == "x86_64-unknown-linux-gnu" {
         defines.insert("PJ_LINUX", "1");
         defines.insert("PJ_SOCK_HAS_INET_ATON", "1");
         defines.insert("PJ_SOCK_HAS_INET_PTON", "1");
         defines.insert("PJ_SOCK_HAS_INET_NTOP", "1");
         defines.insert("PJ_SOCK_HAS_GETADDRINFO", "1");
-
         defines.insert("PJ_HAS_ARPA_INET_H", "1");
         defines.insert("PJ_HAS_ASSERT_H", "1");
         defines.insert("PJ_HAS_CTYPE_H", "1");
@@ -141,6 +144,7 @@ fn main() {
         defines.insert("PJ_THREAD_SET_STACK_SIZE", "0");
         defines.insert("PJ_THREAD_ALLOCATE_STACK", "0");
         defines.insert("PJ_TIMER_DEBUG", "0");
+
         clang_flags.push(String::from("-DPJ_TIMER_DEBUG=0"));
     } else if target == "armv7-linux-androideabi" {
         defines.insert("PJ_ANDROID", "1");
@@ -150,6 +154,7 @@ fn main() {
         defines.insert("PJ_IS_LITTLE_ENDIAN", "1");
         defines.insert("PJ_M_ARMV7", "1");
         defines.insert("PJ_JNI_HAS_JNI_ONLOAD", "0");
+        defines.insert("PJ_TIMER_DEBUG", "0");
 
         // TODO : replace this hack with something else
         let define_from = "#define PJ_HAS_SYS_TIMEB_H	    1";
@@ -174,6 +179,7 @@ fn main() {
         clang_flags.push(String::from("-DPJ_HAS_PENTIUM=0"));
         clang_flags.push(String::from("-DPJ_IS_BIG_ENDIAN=0"));
         clang_flags.push(String::from("-DPJ_IS_LITTLE_ENDIAN=1"));
+        clang_flags.push(String::from("-DPJ_TIMER_DEBUG=0"));
     } else if target == "aarch64-apple-darwin" {
         defines.insert("ARM", "1");
         defines.insert("PJ_HAS_PENTIUM", "0");
@@ -218,42 +224,46 @@ fn main() {
         defines.insert("PJ_IS_LITTLE_ENDIAN", "1");
         defines.insert("PJ_M_ARM64", "1");
         defines.insert("PJ_JNI_HAS_JNI_ONLOAD", "0");
-
+        defines.insert("PJ_TIMER_DEBUG", "0");
+        
         // TODO : replace this hack with something else
         let define_from = "#define PJ_HAS_SYS_TIMEB_H	    1";
         let define_to = "#define PJ_HAS_SYS_TIMEB_H	    0";
-
+        
         let os_linux = Path::new("./vendor/pjlib/include/pj/compat/os_linux.h");
         let mut src = File::open(os_linux).unwrap();
-
+        
         let mut header_data = String::new();
         src.read_to_string(&mut header_data).unwrap();
         drop(src); // Close the file early
-
+        
         // Run the replace operation in memory
         let new_header_data = header_data.replace(&*define_from, &*define_to);
-
+        
         // Recreate the file and dump the processed contents to it
         let mut dst = File::create(&os_linux).unwrap();
         dst.write(new_header_data.as_bytes()).unwrap();
-
+        
         clang_flags.push(String::from("-DARM"));
         clang_flags.push(String::from("-DPJ_M_ARM64"));
         clang_flags.push(String::from("-DPJ_HAS_PENTIUM=0"));
         clang_flags.push(String::from("-DPJ_IS_BIG_ENDIAN=0"));
         clang_flags.push(String::from("-DPJ_IS_LITTLE_ENDIAN=1"));
+        clang_flags.push(String::from("-DPJ_TIMER_DEBUG=0"));
     } else if target == "aarch64-unknown-linux-gnu" {
         defines.insert("ARM", "1");
         defines.insert("PJ_HAS_PENTIUM", "0");
         defines.insert("PJ_IS_BIG_ENDIAN", "0");
         defines.insert("PJ_IS_LITTLE_ENDIAN", "1");
         defines.insert("PJ_M_ARM64", "1");
-
+        defines.insert("PJ_TIMER_DEBUG", "0");
+        
         clang_flags.push(String::from("-DARM"));
         clang_flags.push(String::from("-DPJ_M_ARM64"));
         clang_flags.push(String::from("-DPJ_HAS_PENTIUM=0"));
         clang_flags.push(String::from("-DPJ_IS_BIG_ENDIAN=0"));
         clang_flags.push(String::from("-DPJ_IS_LITTLE_ENDIAN=1"));
+        clang_flags.push(String::from("-DPJ_TIMER_DEBUG=0"));
     } else if target == "wasm32-unknown-emscripten" {
         defines.insert("PJ_LINUX", "1");
         defines.insert("PJ_M_X86_64", "1");
