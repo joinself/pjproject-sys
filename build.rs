@@ -225,6 +225,10 @@ fn main() {
         defines.insert("PJ_M_ARM64", "1");
         defines.insert("PJ_JNI_HAS_JNI_ONLOAD", "0");
         defines.insert("PJ_TIMER_DEBUG", "0");
+        defines.insert("PJ_SOCK_HAS_INET_ATON", "1");
+        defines.insert("PJ_SOCK_HAS_INET_PTON", "1");
+        defines.insert("PJ_SOCK_HAS_INET_NTOP", "1");
+        defines.insert("PJ_SOCK_HAS_GETADDRINFO", "1");
         
         // TODO : replace this hack with something else
         let define_from = "#define PJ_HAS_SYS_TIMEB_H	    1";
