@@ -199,15 +199,9 @@ fn main() {
         defines.insert("PJ_IS_BIG_ENDIAN", "0");
         defines.insert("PJ_IS_LITTLE_ENDIAN", "1");
         defines.insert("PJ_M_ARM64", "1");
-
-        clang_flags.push(String::from("-DARM"));
-        clang_flags.push(String::from("-DPJ_M_ARM64"));
-        clang_flags.push(String::from("-DPJ_HAS_PENTIUM=0"));
-        clang_flags.push(String::from("-DPJ_IS_BIG_ENDIAN=0"));
-        clang_flags.push(String::from("-DPJ_IS_LITTLE_ENDIAN=1"));
-
         defines.insert("PJ_IPHONE_OS_HAS_MULTITASKING_SUPPORT", "1");
         defines.insert("PJ_ACTIVESOCK_TCP_IPHONE_OS_BG", "1");
+        defines.insert("PJ_TIMER_DEBUG", "0");
         defines.insert("PJ_HAS_ARPA_INET_H", "1");
         defines.insert("PJ_HAS_ASSERT_H", "1");
         defines.insert("PJ_HAS_CTYPE_H", "1");
@@ -242,6 +236,13 @@ fn main() {
         defines.insert("PJ_SOCKADDR_HAS_LEN", "1");
         defines.insert("PJ_IOQUEUE_MAX_HANDLES", "1024");
         defines.insert("PJ_HAS_SOCKLEN_T", "1");
+
+        clang_flags.push(String::from("-DARM"));
+        clang_flags.push(String::from("-DPJ_M_ARM64"));
+        clang_flags.push(String::from("-DPJ_HAS_PENTIUM=0"));
+        clang_flags.push(String::from("-DPJ_IS_BIG_ENDIAN=0"));
+        clang_flags.push(String::from("-DPJ_IS_LITTLE_ENDIAN=1"));
+        clang_flags.push(String::from("-DPJ_TIMER_DEBUG=0"));
     } else if target == "aarch64-apple-ios-sim" {
         defines.insert("PJ_DARWINOS", "1");
         defines.insert("ARM", "1");
@@ -249,15 +250,9 @@ fn main() {
         defines.insert("PJ_IS_BIG_ENDIAN", "0");
         defines.insert("PJ_IS_LITTLE_ENDIAN", "1");
         defines.insert("PJ_M_ARM64", "1");
-
-        clang_flags.push(String::from("-DARM"));
-        clang_flags.push(String::from("-DPJ_M_ARM64"));
-        clang_flags.push(String::from("-DPJ_HAS_PENTIUM=0"));
-        clang_flags.push(String::from("-DPJ_IS_BIG_ENDIAN=0"));
-        clang_flags.push(String::from("-DPJ_IS_LITTLE_ENDIAN=1"));
-
         defines.insert("PJ_IPHONE_OS_HAS_MULTITASKING_SUPPORT", "1");
         defines.insert("PJ_ACTIVESOCK_TCP_IPHONE_OS_BG", "1");
+        defines.insert("PJ_TIMER_DEBUG", "0");
         defines.insert("PJ_HAS_ARPA_INET_H", "1");
         defines.insert("PJ_HAS_ASSERT_H", "1");
         defines.insert("PJ_HAS_CTYPE_H", "1");
@@ -292,6 +287,13 @@ fn main() {
         defines.insert("PJ_SOCKADDR_HAS_LEN", "1");
         defines.insert("PJ_IOQUEUE_MAX_HANDLES", "1024");
         defines.insert("PJ_HAS_SOCKLEN_T", "1");
+
+        clang_flags.push(String::from("-DARM"));
+        clang_flags.push(String::from("-DPJ_M_ARM64"));
+        clang_flags.push(String::from("-DPJ_HAS_PENTIUM=0"));
+        clang_flags.push(String::from("-DPJ_IS_BIG_ENDIAN=0"));
+        clang_flags.push(String::from("-DPJ_IS_LITTLE_ENDIAN=1"));
+        clang_flags.push(String::from("-DPJ_TIMER_DEBUG=0"));
     } else if target == "aarch64-linux-android" {
         defines.insert("PJ_ANDROID", "1");
         defines.insert("ARM", "1");
@@ -336,7 +338,6 @@ fn main() {
         defines.insert("PJ_HAS_TIME_H", "1");
         defines.insert("PJ_HAS_UNISTD_H", "1");
         defines.insert("PJ_HAS_SEMAPHORE", "1");
-
         defines.insert("PJ_HAS_SOCKLEN_T", "1");
         defines.insert("PJ_SELECT_NEEDS_NFDS", "0");
         defines.insert("PJ_HAS_ERRNO_VAR", "1");
