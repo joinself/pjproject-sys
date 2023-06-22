@@ -45,19 +45,18 @@ fn main() {
         drop(src); // Close the file early
 
         // Run the replace operation in memory
-        let new_header_data = header_data.replace(&*define_from, &*define_to);
+        let new_header_data = header_data.replace(define_from, define_to);
 
         // Recreate the file and dump the processed contents to it
-        let mut dst = File::create(&os_linux).unwrap();
-        dst.write(new_header_data.as_bytes()).unwrap();
+        let mut dst = File::create(os_linux).unwrap();
+        dst.write_all(new_header_data.as_bytes()).unwrap();
 
         clang_flags.push(String::from("-DPJ_M_I386"));
         clang_flags.push(String::from("-DPJ_HAS_PENTIUM=1"));
         clang_flags.push(String::from("-DPJ_IS_BIG_ENDIAN=0"));
         clang_flags.push(String::from("-DPJ_IS_LITTLE_ENDIAN=1"));
         clang_flags.push(String::from("-DPJ_TIMER_DEBUG=0"));
-    } else if target == "x86_64-apple-darwin" {
-    } else if target == "x86_64-apple-ios" {
+    } else if target == "x86_64-apple-darwin" || target == "x86_64-apple-ios" {
     } else if target == "x86_64-linux-android" {
         defines.insert("PJ_ANDROID", "1");
         defines.insert("ARM", "0");
@@ -80,11 +79,11 @@ fn main() {
         drop(src); // Close the file early
 
         // Run the replace operation in memory
-        let new_header_data = header_data.replace(&*define_from, &*define_to);
+        let new_header_data = header_data.replace(define_from, define_to);
 
         // Recreate the file and dump the processed contents to it
-        let mut dst = File::create(&os_linux).unwrap();
-        dst.write(new_header_data.as_bytes()).unwrap();
+        let mut dst = File::create(os_linux).unwrap();
+        dst.write_all(new_header_data.as_bytes()).unwrap();
 
         clang_flags.push(String::from("-DPJ_M_X86_64"));
         clang_flags.push(String::from("-DPJ_HAS_PENTIUM=1"));
@@ -168,11 +167,11 @@ fn main() {
         drop(src); // Close the file early
 
         // Run the replace operation in memory
-        let new_header_data = header_data.replace(&*define_from, &*define_to);
+        let new_header_data = header_data.replace(define_from, define_to);
 
         // Recreate the file and dump the processed contents to it
-        let mut dst = File::create(&os_linux).unwrap();
-        dst.write(new_header_data.as_bytes()).unwrap();
+        let mut dst = File::create(os_linux).unwrap();
+        dst.write_all(new_header_data.as_bytes()).unwrap();
 
         clang_flags.push(String::from("-DARM"));
         clang_flags.push(String::from("-DPJ_M_ARMV7"));
@@ -192,101 +191,69 @@ fn main() {
         clang_flags.push(String::from("-DPJ_HAS_PENTIUM=0"));
         clang_flags.push(String::from("-DPJ_IS_BIG_ENDIAN=0"));
         clang_flags.push(String::from("-DPJ_IS_LITTLE_ENDIAN=1"));
-    } else if target == "aarch64-apple-ios" {
-        defines.insert("PJ_DARWINOS", "1");
+    } else if target == "aarch64-apple-ios" || target == "aarch64-apple-ios-sim" {
         defines.insert("ARM", "1");
-        defines.insert("PJ_HAS_PENTIUM", "0");
-        defines.insert("PJ_IS_BIG_ENDIAN", "0");
-        defines.insert("PJ_IS_LITTLE_ENDIAN", "1");
-        defines.insert("PJ_M_ARM64", "1");
-        defines.insert("PJ_IPHONE_OS_HAS_MULTITASKING_SUPPORT", "1");
         defines.insert("PJ_ACTIVESOCK_TCP_IPHONE_OS_BG", "1");
-        defines.insert("PJ_TIMER_DEBUG", "0");
+        defines.insert("PJ_ATOMIC_VALUE_TYPE", "long");
+        defines.insert("PJ_BLOCKING_CONNECT_ERROR_VAL", "EINPROGRESS");
+        defines.insert("PJ_BLOCKING_ERROR_VAL", "EWOULDBLOCK");
+        defines.insert("PJ_DARWINOS", "1");
         defines.insert("PJ_HAS_ARPA_INET_H", "1");
         defines.insert("PJ_HAS_ASSERT_H", "1");
         defines.insert("PJ_HAS_CTYPE_H", "1");
         defines.insert("PJ_HAS_ERRNO_H", "1");
+        defines.insert("PJ_HAS_ERRNO_VAR", "1");
+        defines.insert("PJ_HAS_FCNTL_H", "1");
+        defines.insert("PJ_HAS_HIGH_RES_TIMER", "1");
+        defines.insert("PJ_HAS_IFADDRS_H", "1");
+        defines.insert("PJ_HAS_LIMITS_H", "1");
+        defines.insert("PJ_HAS_LOCALTIME_R", "1");
+        defines.insert("PJ_HAS_MALLOC", "1");
         defines.insert("PJ_HAS_NETDB_H", "1");
+        defines.insert("PJ_HAS_NET_IF_H", "1");
         defines.insert("PJ_HAS_NETINET_IN_H", "1");
+        defines.insert("PJ_HAS_NETINET_IN_SYSTM_H", "1");
+        defines.insert("PJ_HAS_NETINET_IP_H", "1");
         defines.insert("PJ_HAS_NETINET_TCP_H", "1");
+        defines.insert("PJ_HAS_PENTIUM", "0");
+        defines.insert("PJ_HAS_SEMAPHORE", "1");
+        defines.insert("PJ_HAS_SEMAPHORE_H", "1");
         defines.insert("PJ_HAS_SETJMP_H", "1");
+        defines.insert("PJ_HAS_SOCKLEN_T", "1");
+        defines.insert("PJ_HAS_SO_ERROR", "1");
         defines.insert("PJ_HAS_STDARG_H", "1");
         defines.insert("PJ_HAS_STDDEF_H", "1");
+        defines.insert("PJ_HAS_STDINT_H", "1");
         defines.insert("PJ_HAS_STDIO_H", "1");
         defines.insert("PJ_HAS_STDLIB_H", "1");
         defines.insert("PJ_HAS_STRING_H", "1");
+        defines.insert("PJ_HAS_SYS_FILIO_H", "1");
         defines.insert("PJ_HAS_SYS_IOCTL_H", "1");
         defines.insert("PJ_HAS_SYS_SELECT_H", "1");
         defines.insert("PJ_HAS_SYS_SOCKET_H", "1");
-        defines.insert("PJ_HAS_SYS_TIME_H", "1");
+        defines.insert("PJ_HAS_SYS_SOCKIO_H", "1");
         defines.insert("PJ_HAS_SYS_TIMEB_H", "1");
+        defines.insert("PJ_HAS_SYS_TIME_H", "1");
         defines.insert("PJ_HAS_SYS_TYPES_H", "1");
+        defines.insert("PJ_HAS_SYS_UTSNAME_H", "1");
+        defines.insert("PJ_HAS_THREADS", "1");
         defines.insert("PJ_HAS_TIME_H", "1");
         defines.insert("PJ_HAS_UNISTD_H", "1");
-        defines.insert("PJ_HAS_LOCALTIME_R", "1");
-        defines.insert("PJ_HAS_ERRNO_VAR", "1");
-        defines.insert("PJ_SOCK_HAS_INET_ATON", "1");
-        defines.insert("PJ_HAS_SO_ERROR", "1");
-        defines.insert("PJ_BLOCKING_ERROR_VAL", "EWOULDBLOCK");
-        defines.insert("PJ_BLOCKING_CONNECT_ERROR_VAL", "EINPROGRESS");
-        defines.insert("PJ_HAS_THREADS", "1");
-        defines.insert("PJ_HAS_HIGH_RES_TIMER", "1");
-        defines.insert("PJ_HAS_MALLOC", "1");
-        defines.insert("PJ_ATOMIC_VALUE_TYPE", "long");
-        defines.insert("PJ_SOCKADDR_HAS_LEN", "1");
         defines.insert("PJ_IOQUEUE_MAX_HANDLES", "1024");
-        defines.insert("PJ_HAS_SOCKLEN_T", "1");
-
-        clang_flags.push(String::from("-DARM"));
-        clang_flags.push(String::from("-DPJ_M_ARM64"));
-        clang_flags.push(String::from("-DPJ_HAS_PENTIUM=0"));
-        clang_flags.push(String::from("-DPJ_IS_BIG_ENDIAN=0"));
-        clang_flags.push(String::from("-DPJ_IS_LITTLE_ENDIAN=1"));
-        clang_flags.push(String::from("-DPJ_TIMER_DEBUG=0"));
-    } else if target == "aarch64-apple-ios-sim" {
-        defines.insert("PJ_DARWINOS", "1");
-        defines.insert("ARM", "1");
-        defines.insert("PJ_HAS_PENTIUM", "0");
+        defines.insert("PJ_IPHONE_OS_HAS_MULTITASKING_SUPPORT", "1");
         defines.insert("PJ_IS_BIG_ENDIAN", "0");
         defines.insert("PJ_IS_LITTLE_ENDIAN", "1");
         defines.insert("PJ_M_ARM64", "1");
-        defines.insert("PJ_IPHONE_OS_HAS_MULTITASKING_SUPPORT", "1");
-        defines.insert("PJ_ACTIVESOCK_TCP_IPHONE_OS_BG", "1");
-        defines.insert("PJ_TIMER_DEBUG", "0");
-        defines.insert("PJ_HAS_ARPA_INET_H", "1");
-        defines.insert("PJ_HAS_ASSERT_H", "1");
-        defines.insert("PJ_HAS_CTYPE_H", "1");
-        defines.insert("PJ_HAS_ERRNO_H", "1");
-        defines.insert("PJ_HAS_NETDB_H", "1");
-        defines.insert("PJ_HAS_NETINET_IN_H", "1");
-        defines.insert("PJ_HAS_NETINET_TCP_H", "1");
-        defines.insert("PJ_HAS_SETJMP_H", "1");
-        defines.insert("PJ_HAS_STDARG_H", "1");
-        defines.insert("PJ_HAS_STDDEF_H", "1");
-        defines.insert("PJ_HAS_STDIO_H", "1");
-        defines.insert("PJ_HAS_STDLIB_H", "1");
-        defines.insert("PJ_HAS_STRING_H", "1");
-        defines.insert("PJ_HAS_SYS_IOCTL_H", "1");
-        defines.insert("PJ_HAS_SYS_SELECT_H", "1");
-        defines.insert("PJ_HAS_SYS_SOCKET_H", "1");
-        defines.insert("PJ_HAS_SYS_TIME_H", "1");
-        defines.insert("PJ_HAS_SYS_TIMEB_H", "1");
-        defines.insert("PJ_HAS_SYS_TYPES_H", "1");
-        defines.insert("PJ_HAS_TIME_H", "1");
-        defines.insert("PJ_HAS_UNISTD_H", "1");
-        defines.insert("PJ_HAS_LOCALTIME_R", "1");
-        defines.insert("PJ_HAS_ERRNO_VAR", "1");
-        defines.insert("PJ_SOCK_HAS_INET_ATON", "1");
-        defines.insert("PJ_HAS_SO_ERROR", "1");
-        defines.insert("PJ_BLOCKING_ERROR_VAL", "EWOULDBLOCK");
-        defines.insert("PJ_BLOCKING_CONNECT_ERROR_VAL", "EINPROGRESS");
-        defines.insert("PJ_HAS_THREADS", "1");
-        defines.insert("PJ_HAS_HIGH_RES_TIMER", "1");
-        defines.insert("PJ_HAS_MALLOC", "1");
-        defines.insert("PJ_ATOMIC_VALUE_TYPE", "long");
+        defines.insert("PJ_NATIVE_STRING_IS_UNICODE", "0");
+        defines.insert("PJ_POOL_ALIGNMENT", "8");
+        defines.insert("PJ_SELECT_NEEDS_NFDS", "0");
         defines.insert("PJ_SOCKADDR_HAS_LEN", "1");
-        defines.insert("PJ_IOQUEUE_MAX_HANDLES", "1024");
-        defines.insert("PJ_HAS_SOCKLEN_T", "1");
+        defines.insert("PJ_SOCK_HAS_GETADDRINFO", "1");
+        defines.insert("PJ_SOCK_HAS_INET_ATON", "1");
+        defines.insert("PJ_SOCK_HAS_INET_NTOP", "1");
+        defines.insert("PJ_SOCK_HAS_INET_PTON", "1");
+        defines.insert("PJ_SOCK_HAS_IPV6_V6ONLY", "1");
+        defines.insert("PJ_TIMER_DEBUG", "0");
 
         clang_flags.push(String::from("-DARM"));
         clang_flags.push(String::from("-DPJ_M_ARM64"));
@@ -366,11 +333,11 @@ fn main() {
         drop(src); // Close the file early
 
         // Run the replace operation in memory
-        let new_header_data = header_data.replace(&*define_from, &*define_to);
+        let new_header_data = header_data.replace(define_from, define_to);
 
         // Recreate the file and dump the processed contents to it
-        let mut dst = File::create(&os_linux).unwrap();
-        dst.write(new_header_data.as_bytes()).unwrap();
+        let mut dst = File::create(os_linux).unwrap();
+        dst.write_all(new_header_data.as_bytes()).unwrap();
 
         clang_flags.push(String::from("-DARM"));
         clang_flags.push(String::from("-DPJ_M_ARM64"));
