@@ -242,7 +242,7 @@ fn main() {
         defines.insert("PJ_SELECT_NEEDS_NFDS", "0");
         defines.insert("PJ_HAS_ERRNO_VAR", "1");
         defines.insert("PJ_HAS_SO_ERROR", "1");
-        defines.insert("PJ_BLOCKING_ERROR_VAL", "EAGAIN");
+        // defines.insert("PJ_BLOCKING_ERROR_VAL", "EAGAIN");
         defines.insert("PJ_BLOCKING_CONNECT_ERROR_VAL", "EINPROGRESS");
         defines.insert("PJ_HAS_HIGH_RES_TIMER", "1");
         defines.insert("PJ_HAS_MALLOC", "1");
